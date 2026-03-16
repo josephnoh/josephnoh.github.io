@@ -22,7 +22,7 @@ jobs:
         run: |
           # Fetch contribution data (includes private repos)
           QUERY='{
-            "query": "query { viewer { login repositories(privacy: PUBLIC) { totalCount } contributionsCollection { contributionCalendar { totalContributions weeks { contributionDays { contributionCount date } } } } } }"
+            "query": "query { viewer { login repositories { totalCount } contributionsCollection { contributionCalendar { totalContributions weeks { contributionDays { contributionCount date } } } } } }"
           }'
 
           RESPONSE=$(curl -s -H "Authorization: bearer $GH_TOKEN" \

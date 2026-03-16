@@ -169,16 +169,19 @@
     }
     .contrib-graph {
       display: flex;
-      gap: 3px;
+      gap: 2px;
+      width: 100%;
     }
     .contrib-week {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 2px;
+      flex: 1;
+      min-width: 0;
     }
     .contrib-day {
-      width: 11px;
-      height: 11px;
+      width: 100%;
+      aspect-ratio: 1;
       border-radius: 2px;
       background: rgba(255,255,255,0.04);
     }
@@ -196,8 +199,8 @@
       color: #555;
     }
     .contrib-legend-box {
-      width: 11px;
-      height: 11px;
+      width: 10px;
+      height: 10px;
       border-radius: 2px;
     }
     .contrib-months {
@@ -291,7 +294,8 @@
       .hero-name { font-size: 1.8rem; }
       .stats-row { grid-template-columns: repeat(2, 1fr); }
       .projects-grid { grid-template-columns: 1fr; }
-      .contrib-day { width: 9px; height: 9px; }
+      .contrib-graph { gap: 1px; }
+      .contrib-week { gap: 1px; }
     }
   </style>
 </head>
@@ -353,7 +357,7 @@
 
     <!-- Projects -->
     <div class="section-title" style="margin-top: 32px;">Projects</div>
-    <div class="projects-grid">
+    <div class="projects-grid" style="grid-template-columns: 1fr;">
       <a class="card project-card" href="https://josephnoh.github.io/immigration-finance-tracker/" target="_blank">
         <div class="project-icon">📊</div>
         <div class="project-name">Immigration Finance Tracker</div>
@@ -362,16 +366,6 @@
           <span class="project-tag">GitHub Pages</span>
           <span class="project-tag">Chart.js</span>
           <span class="project-tag">GitHub Actions</span>
-        </div>
-      </a>
-      <a class="card project-card" href="https://github.com/josephnoh/BlockChainTrade" target="_blank">
-        <div class="project-icon">🤖</div>
-        <div class="project-name">BlockChainTrade</div>
-        <div class="project-desc">Binance 선물 자동매매 봇. Multi-agent 아키텍처, 지표 조합 최적화, 텔레그램 알림.</div>
-        <div class="project-tags">
-          <span class="project-tag">Python</span>
-          <span class="project-tag">Binance API</span>
-          <span class="project-tag">Multi-Agent</span>
         </div>
       </a>
     </div>
