@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joseph Noh</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #08081a;
+      color: #e2e2e2;
+      min-height: 100vh;
+      padding: 48px 24px 60px;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(102,126,234,0.08) 0%, rgba(118,75,162,0.04) 40%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      animation: fadeIn 0.6s ease-out;
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Card base — glassmorphism */
+    .card {
+      background: rgba(17, 17, 40, 0.6);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 20px;
+      transition: transform 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(102,126,234,0.15);
+      box-shadow: 0 8px 32px rgba(102,126,234,0.06);
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 48px 28px;
+      margin-bottom: 32px;
+    }
+    .hero-name {
+      font-size: 2.4rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #667eea 0%, #a78bfa 50%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+    .hero-title {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #888;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .hero-links {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+    .hero-links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .hero-links a:hover {
+      border-color: rgba(102,126,234,0.4);
+      color: #e2e2e2;
+      background: rgba(102,126,234,0.06);
+    }
+    .hero-links svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* Section titles */
+    .section-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #555;
+      margin-bottom: 16px;
+    }
+
+    /* Stats row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      text-align: center;
+      padding: 20px 12px;
+    }
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #f0f0f0;
+      letter-spacing: -0.02em;
+    }
+    .stat-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: #666;
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* Contribution graph */
+    .contrib-card {
+      padding: 28px;
+      overflow-x: auto;
+    }
+    .contrib-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .contrib-header .section-title {
+      margin-bottom: 0;
+    }
+    .contrib-year {
+      font-size: 0.75rem;
+      color: #555;
+    }
+    .contrib-graph {
+      display: flex;
+      gap: 3px;
+    }
+    .contrib-week {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .contrib-day {
+      width: 11px;
+      height: 11px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.04);
+    }
+    .contrib-day[data-level="1"] { background: rgba(102,126,234,0.25); }
+    .contrib-day[data-level="2"] { background: rgba(102,126,234,0.45); }
+    .contrib-day[data-level="3"] { background: rgba(102,126,234,0.65); }
+    .contrib-day[data-level="4"] { background: #667eea; }
+    .contrib-legend {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      justify-content: flex-end;
+      margin-top: 10px;
+      font-size: 0.68rem;
+      color: #555;
+    }
+    .contrib-legend-box {
+      width: 11px;
+      height: 11px;
+      border-radius: 2px;
+    }
+    .contrib-months {
+      display: flex;
+      font-size: 0.65rem;
+      color: #555;
+      margin-bottom: 6px;
+      padding-left: 0;
+    }
+    .contrib-months span {
+      flex: 1;
+      text-align: left;
+    }
+
+    /* Projects */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .project-card {
+      padding: 24px;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .project-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(102,126,234,0.2);
+    }
+    .project-icon {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+    }
+    .project-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #f0f0f0;
+      margin-bottom: 6px;
+    }
+    .project-desc {
+      font-size: 0.8rem;
+      color: #777;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .project-tag {
+      font-size: 0.68rem;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(102,126,234,0.1);
+      color: #8899dd;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      font-size: 0.72rem;
+      color: #444;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+
+    /* Tooltip */
+    .contrib-tooltip {
+      position: fixed;
+      padding: 6px 10px;
+      background: rgba(20, 20, 50, 0.95);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      font-size: 0.7rem;
+      color: #ccc;
+      pointer-events: none;
+      z-index: 100;
+      white-space: nowrap;
+      display: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      body { padding: 24px 16px 40px; }
+      .hero { padding: 32px 16px; }
+      .hero-name { font-size: 1.8rem; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .projects-grid { grid-template-columns: 1fr; }
+      .contrib-day { width: 9px; height: 9px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Hero -->
+    <div class="card hero">
+      <h1 class="hero-name">Joseph Noh</h1>
+      <p class="hero-title">Software Engineer &amp; Builder</p>
+      <div class="hero-links">
+        <a href="https://github.com/josephnoh" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+
+    <!-- GitHub Activity -->
+    <div class="section-title">GitHub Activity</div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="card stat-card">
+        <div class="stat-value" id="total-contributions">—</div>
+        <div class="stat-label">Contributions</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-value" id="total-repos">—</div>
+        <div class="stat-label">Repositories</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-value" id="current-streak">—</div>
+        <div class="stat-label">Current Streak</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-value" id="longest-streak">—</div>
+        <div class="stat-label">Longest Streak</div>
+      </div>
+    </div>
+
+    <!-- Contribution Graph -->
+    <div class="card contrib-card">
+      <div class="contrib-header">
+        <div class="section-title">Contribution Graph</div>
+        <div class="contrib-year" id="contrib-year"></div>
+      </div>
+      <div class="contrib-months" id="contrib-months"></div>
+      <div class="contrib-graph" id="contrib-graph"></div>
+      <div class="contrib-legend">
+        <span>Less</span>
+        <div class="contrib-legend-box" style="background: rgba(255,255,255,0.04)"></div>
+        <div class="contrib-legend-box" style="background: rgba(102,126,234,0.25)"></div>
+        <div class="contrib-legend-box" style="background: rgba(102,126,234,0.45)"></div>
+        <div class="contrib-legend-box" style="background: rgba(102,126,234,0.65)"></div>
+        <div class="contrib-legend-box" style="background: #667eea"></div>
+        <span>More</span>
+      </div>
+    </div>
+
+    <!-- Projects -->
+    <div class="section-title" style="margin-top: 32px;">Projects</div>
+    <div class="projects-grid">
+      <a class="card project-card" href="https://josephnoh.github.io/immigration-finance-tracker/" target="_blank">
+        <div class="project-icon">📊</div>
+        <div class="project-name">Immigration Finance Tracker</div>
+        <div class="project-desc">$1M 이민 재정 목표를 추적하는 대시보드. 자산 구성, 추이 차트, 자동 가격 업데이트.</div>
+        <div class="project-tags">
+          <span class="project-tag">GitHub Pages</span>
+          <span class="project-tag">Chart.js</span>
+          <span class="project-tag">GitHub Actions</span>
+        </div>
+      </a>
+      <a class="card project-card" href="https://github.com/josephnoh/BlockChainTrade" target="_blank">
+        <div class="project-icon">🤖</div>
+        <div class="project-name">BlockChainTrade</div>
+        <div class="project-desc">Binance 선물 자동매매 봇. Multi-agent 아키텍처, 지표 조합 최적화, 텔레그램 알림.</div>
+        <div class="project-tags">
+          <span class="project-tag">Python</span>
+          <span class="project-tag">Binance API</span>
+          <span class="project-tag">Multi-Agent</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer" id="footer">
+      Built by Joseph Noh
+    </div>
+  </div>
+
+  <div class="contrib-tooltip" id="tooltip"></div>
+
+  <script>
+    async function loadStats() {
+      try {
+        const res = await fetch('github-stats.json');
+        if (!res.ok) return;
+        const data = await res.json();
+
+        // Stats
+        document.getElementById('total-contributions').textContent = (data.totalContributions || 0).toLocaleString();
+        document.getElementById('total-repos').textContent = data.totalRepos || '—';
+        document.getElementById('current-streak').textContent = data.currentStreak ? data.currentStreak + 'd' : '—';
+        document.getElementById('longest-streak').textContent = data.longestStreak ? data.longestStreak + 'd' : '—';
+
+        // Contribution graph
+        if (data.contributions && data.contributions.length > 0) {
+          renderContribGraph(data.contributions);
+        }
+
+        // Footer
+        if (data.updatedAt) {
+          document.getElementById('footer').textContent = `Built by Joseph Noh · Last synced ${data.updatedAt}`;
+        }
+      } catch (e) {
+        console.log('Stats not loaded yet:', e.message);
+      }
+    }
+
+    function renderContribGraph(contributions) {
+      const graph = document.getElementById('contrib-graph');
+      const monthsEl = document.getElementById('contrib-months');
+      const yearEl = document.getElementById('contrib-year');
+      const tooltip = document.getElementById('tooltip');
+      graph.innerHTML = '';
+      monthsEl.innerHTML = '';
+
+      // contributions is array of { date, count }
+      // Group into weeks (Sun-Sat)
+      const firstDate = new Date(contributions[0].date);
+      const lastDate = new Date(contributions[contributions.length - 1].date);
+      yearEl.textContent = lastDate.getFullYear();
+
+      // Find max for level scaling
+      const counts = contributions.map(c => c.count);
+      const maxCount = Math.max(...counts, 1);
+
+      function getLevel(count) {
+        if (count === 0) return 0;
+        const ratio = count / maxCount;
+        if (ratio <= 0.25) return 1;
+        if (ratio <= 0.5) return 2;
+        if (ratio <= 0.75) return 3;
+        return 4;
+      }
+
+      // Pad start to Sunday
+      const startDow = firstDate.getDay();
+      const padded = [];
+      for (let i = 0; i < startDow; i++) {
+        padded.push({ date: null, count: -1 });
+      }
+      padded.push(...contributions);
+
+      // Build weeks
+      const weeks = [];
+      for (let i = 0; i < padded.length; i += 7) {
+        weeks.push(padded.slice(i, i + 7));
+      }
+
+      // Track months for labels
+      const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      let lastMonth = -1;
+      const monthPositions = [];
+
+      weeks.forEach((week, wi) => {
+        const weekEl = document.createElement('div');
+        weekEl.className = 'contrib-week';
+
+        week.forEach(day => {
+          const dayEl = document.createElement('div');
+          dayEl.className = 'contrib-day';
+          if (day.count >= 0) {
+            dayEl.setAttribute('data-level', getLevel(day.count));
+            if (day.date) {
+              const d = new Date(day.date);
+              const month = d.getMonth();
+              if (month !== lastMonth) {
+                monthPositions.push({ week: wi, month });
+                lastMonth = month;
+              }
+              dayEl.addEventListener('mouseenter', (e) => {
+                tooltip.textContent = `${day.count} contributions on ${day.date}`;
+                tooltip.style.display = 'block';
+                tooltip.style.left = e.clientX + 12 + 'px';
+                tooltip.style.top = e.clientY - 30 + 'px';
+              });
+              dayEl.addEventListener('mouseleave', () => {
+                tooltip.style.display = 'none';
+              });
+            }
+          } else {
+            dayEl.style.visibility = 'hidden';
+          }
+          weekEl.appendChild(dayEl);
+        });
+
+        graph.appendChild(weekEl);
+      });
+
+      // Month labels
+      const totalWeeks = weeks.length;
+      monthPositions.forEach(mp => {
+        const span = document.createElement('span');
+        span.textContent = monthNames[mp.month];
+        span.style.position = 'absolute';
+        span.style.left = (mp.week / totalWeeks * 100) + '%';
+        monthsEl.appendChild(span);
+      });
+      monthsEl.style.position = 'relative';
+      monthsEl.style.height = '16px';
+    }
+
+    loadStats();
+  </script>
+</body>
+</html>
