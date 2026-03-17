@@ -535,12 +535,17 @@
       const lastDate = new Date(contributions[contributions.length - 1].date);
       yearEl.textContent = lastDate.getFullYear();
 
+      // Filter to current year only
+      const currentYear = lastDate.getFullYear();
+      const filtered = contributions.filter(d => d.date >= currentYear + '-01-01');
+      const hasOlderData = filtered.length < contributions.length;
+
       // Pad start to Sunday and group into weeks
-      const firstDate = new Date(contributions[0].date);
+      const firstDate = new Date(filtered[0].date);
       const startDow = firstDate.getDay();
       const padded = [];
       for (let i = 0; i < startDow; i++) padded.push({ date: null, count: 0 });
-      padded.push(...contributions);
+      padded.push(...filtered);
 
       const weeklyData = [];
       for (let i = 0; i < padded.length; i += 7) {
@@ -567,6 +572,14 @@
       const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
       let lastMonth = -1;
       const monthPositions = [];
+
+      // Show "..." indicator if older data is hidden
+      if (hasOlderData) {
+        const dots = document.createElement('div');
+        dots.style.cssText = 'display:flex;align-items:flex-end;padding:0 6px 0 0;font-size:0.7rem;color:#94A3B8;font-weight:600;letter-spacing:2px;min-height:4px;';
+        dots.textContent = '...';
+        graph.appendChild(dots);
+      }
 
       weeklyData.forEach((week, wi) => {
         if (week.startDate) {
