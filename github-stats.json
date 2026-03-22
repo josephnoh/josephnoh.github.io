@@ -1,37 +1,9 @@
 {
   "totalContributions": 451,
   "totalRepos": 14,
-  "currentStreak": 5,
+  "currentStreak": 0,
   "longestStreak": 10,
   "contributions": [
-    {
-      "date": "2025-03-16",
-      "count": 0
-    },
-    {
-      "date": "2025-03-17",
-      "count": 0
-    },
-    {
-      "date": "2025-03-18",
-      "count": 0
-    },
-    {
-      "date": "2025-03-19",
-      "count": 0
-    },
-    {
-      "date": "2025-03-20",
-      "count": 0
-    },
-    {
-      "date": "2025-03-21",
-      "count": 0
-    },
-    {
-      "date": "2025-03-22",
-      "count": 0
-    },
     {
       "date": "2025-03-23",
       "count": 0
@@ -1487,7 +1459,11 @@
     {
       "date": "2026-03-21",
       "count": 0
+    },
+    {
+      "date": "2026-03-22",
+      "count": 0
     }
   ],
-  "updatedAt": "2026-03-21"
+  "updatedAt": "2026-03-22"
 }
